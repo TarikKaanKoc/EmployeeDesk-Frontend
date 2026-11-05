@@ -1,0 +1,1201 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "lenis/dist/lenis.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Geist first, then the Arabic face. The browser walks this list per
+     character, so Latin text and digits always resolve to Geist and only
+     Arabic glyphs - which Geist does not cover - fall through to Noto Kufi.
+     One stack for both locales, no swap on language change.
+     (Geist replaced Inter in the 2026-08-18 type pass; the Multify colour
+     palette from that same pass was reverted, the face was kept.) */
+  --font-sans:
+    var(--font-geist), var(--font-arabic), ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono:
+    var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --radius: 0.625rem;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.16 0.015 215);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0.015 215);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0.015 215);
+
+  /* Brand violet, sampled from the approved sign-in at #6B60AC.
+
+     Only the interactive tokens carry it: buttons, focus rings, the active
+     nav row. The neutrals, the chart ramp and the auth panel stay on the slate
+     hue 250, which is what keeps a saturated primary from turning into a
+     fourth loud colour beside the red, amber and green this console uses to
+     mean something. */
+  --primary: oklch(0.58 0.1 176);
+  --primary-foreground: oklch(0.99 0.005 176);
+  /* The one place identity is allowed to be a colour. Light mode takes a
+     darker step so the mark holds on white; dark mode a lighter one. */
+  --logo-accent: oklch(0.58 0.1 176);
+
+  --secondary: oklch(0.968 0.008 215);
+  --secondary-foreground: oklch(0.24 0.02 215);
+  --muted: oklch(0.968 0.008 215);
+  --muted-foreground: oklch(0.53 0.02 215);
+  --accent: oklch(0.95 0.025 176);
+  --accent-foreground: oklch(0.32 0.06 176);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.585 0.14 156.7);
+  --warning: oklch(0.754 0.184 85.869);
+
+  --border: oklch(0.917 0.01 215);
+  --input: oklch(0.917 0.01 215);
+  --ring: oklch(0.58 0.1 176);
+
+  /* Categorical chart slots - fixed order, never cycled.
+     Validated (light surface): lightness band, chroma floor, CVD separation,
+     normal-vision floor and 3:1 contrast all pass. */
+  /* ------------------------------------------------------------------ */
+  /* Data visualisation                                                   */
+  /*                                                                      */
+  /* Deliberately not the `--chart-*` rainbow. A console reports on money,
+     and a page of teal-orange-purple-pink reads as a consumer app however
+     good the numbers are. This is one hue in four steps, at roughly half
+     the chroma of the UI accent, so a chart recedes into the panel instead
+     of competing with the figure printed above it. Series are assigned
+     strongest to faintest by size, which also means the ordering carries
+     meaning that colour alone would not.
+
+     Status stays out of it: destructive, warning and success are reserved
+     for state, so a red mark on this page always means something is wrong
+     rather than "series four". */
+  /* ------------------------------------------------------------------ */
+  --viz-1: oklch(0.42 0.055 215);
+  --viz-2: oklch(0.57 0.045 215);
+  --viz-3: oklch(0.71 0.032 215);
+  --viz-4: oklch(0.84 0.022 215);
+  --viz-muted: oklch(0.82 0.012 215);
+  --viz-grid: oklch(0.9 0.008 215);
+
+  --chart-1: oklch(0.6 0.11 176);
+  --chart-2: oklch(0.6 0.135 65);
+  --chart-3: oklch(0.52 0.19 322);
+  --chart-4: oklch(0.53 0.21 355);
+  --chart-5: oklch(0.56 0.15 142);
+
+  /* Dark rail in the brand's own violet. */
+  --sidebar: oklch(0.27 0.025 215);
+  --sidebar-foreground: oklch(0.95 0.01 215);
+  --sidebar-primary: oklch(0.76 0.1 176);
+  --sidebar-primary-foreground: oklch(0.22 0.04 176);
+  --sidebar-accent: oklch(1 0 0 / 10%);
+  --sidebar-accent-foreground: oklch(0.98 0.005 215);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.76 0.1 176);
+}
+
+.dark {
+  --background: oklch(0.155 0.014 215);
+  --foreground: oklch(0.975 0.004 215);
+  --card: oklch(0.205 0.016 215);
+  --card-foreground: oklch(0.975 0.004 215);
+  --popover: oklch(0.205 0.016 215);
+  --popover-foreground: oklch(0.975 0.004 215);
+
+  --primary: oklch(0.74 0.11 176);
+  --primary-foreground: oklch(0.2 0.04 176);
+  /* The light step for dark surfaces. */
+  --logo-accent: oklch(0.8 0.06 176);
+
+  --secondary: oklch(0.27 0.018 215);
+  --secondary-foreground: oklch(0.975 0.004 215);
+  --muted: oklch(0.27 0.018 215);
+  --muted-foreground: oklch(0.705 0.018 215);
+  --accent: oklch(0.3 0.035 176);
+  --accent-foreground: oklch(0.94 0.02 176);
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.724 0.144 163.278);
+  --warning: oklch(0.808 0.156 88.447);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.74 0.11 176);
+
+  /* Dark steps are chosen against the dark surface, not flipped from light. */
+  --viz-1: oklch(0.8 0.045 215);
+  --viz-2: oklch(0.66 0.036 215);
+  --viz-3: oklch(0.52 0.028 215);
+  --viz-4: oklch(0.4 0.02 215);
+  --viz-muted: oklch(0.44 0.012 215);
+  --viz-grid: oklch(0.3 0.014 215);
+
+  --chart-1: oklch(0.7 0.12 176);
+  --chart-2: oklch(0.65 0.13 65);
+  --chart-3: oklch(0.6 0.16 322);
+  --chart-4: oklch(0.6 0.2 355);
+  --chart-5: oklch(0.665 0.17 142);
+
+  --sidebar: oklch(0.2 0.015 215);
+  --sidebar-foreground: oklch(0.975 0.004 215);
+  --sidebar-primary: oklch(0.74 0.11 176);
+  --sidebar-primary-foreground: oklch(0.2 0.04 176);
+  --sidebar-accent: oklch(0.29 0.025 215);
+  --sidebar-accent-foreground: oklch(0.94 0.02 176);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.74 0.11 176);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-viz-1: var(--viz-1);
+  --color-viz-2: var(--viz-2);
+  --color-viz-3: var(--viz-3);
+  --color-viz-4: var(--viz-4);
+  --color-viz-muted: var(--viz-muted);
+  --color-viz-grid: var(--viz-grid);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* The error screens' illustration: a slow bob for the floating pieces, a
+   slow turn for the gears, a sweeping bar for the maintenance window. All
+   behind `motion-safe:` in the markup, so a reduced-motion reader gets the
+   still picture. */
+@theme {
+  --animate-error-float: error-float 6s ease-in-out infinite;
+  --animate-error-spin: error-spin 24s linear infinite;
+  --animate-error-spin-reverse: error-spin 18s linear infinite reverse;
+  --animate-error-progress: error-progress 2.4s ease-in-out infinite;
+  --animate-error-stripes: error-stripes 0.8s linear infinite;
+  --animate-logo-marquee: logo-marquee 30s linear infinite;
+
+  @keyframes logo-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes error-float {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -8px;
+    }
+  }
+
+  @keyframes error-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes error-stripes {
+    to {
+      translate: 22.6px 0;
+    }
+  }
+
+  @keyframes error-progress {
+    0% {
+      translate: -100% 0;
+    }
+    100% {
+      translate: 200% 0;
+    }
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Scrollbars                                                          */
+  /*                                                                     */
+  /* A slim rounded pill on a transparent gutter: present when you reach  */
+  /* for it, invisible in the design when you don't.                     */
+  /* Firefox gets the standard properties; WebKit gets the    */
+  /* pseudo-elements (Chrome ignores ::-webkit-scrollbar as soon as the  */
+  /* standard properties are set, so they are scoped to Firefox only).   */
+  @supports (-moz-appearance: none) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: oklch(0.55 0.02 176 / 0.35) transparent;
+    }
+    html {
+      scrollbar-color: oklch(0.55 0.02 176 / 0.35) var(--background);
+    }
+  }
+  /* Panes that show their bar only while they are being scrolled, and then
+     a slim one: the standard properties, which every current engine takes,
+     and which make WebKit drop its own pseudo-element styling for the
+     element - so the bar here is the engine's thin overlay-style bar. */
+  .scrollbar-auto {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    scrollbar-gutter: stable;
+  }
+  .scrollbar-auto:hover,
+  .scrollbar-auto[data-scrolling="true"] {
+    scrollbar-color: oklch(0.55 0.02 176 / 0.35) transparent;
+  }
+  .dark .scrollbar-auto:hover,
+  .dark .scrollbar-auto[data-scrolling="true"] {
+    scrollbar-color: oklch(0.7 0.02 176 / 0.3) transparent;
+  }
+  /* Regions that scroll without showing it - the copilot thread reads as
+     a page, not a pane, so its bar stays hidden while the wheel works. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  /* The document's own gutter sits over the shell wrapper, which wears the
+     rail's navy - through a transparent track that reads as a dark stripe
+     down the right edge of every page. The page ground instead. */
+  html::-webkit-scrollbar-track,
+  html::-webkit-scrollbar-corner {
+    background: var(--background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: oklch(0.55 0.02 176 / 0.32);
+    border: 4px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+    min-height: 44px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(0.5 0.025 176 / 0.55);
+    border-width: 3px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: oklch(0.7 0.02 176 / 0.3);
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(0.75 0.02 176 / 0.5);
+  }
+
+  html {
+    @apply bg-background font-sans;
+    /* No rubber-band at the ends of the page. A fast scroll on macOS drags
+       the whole document past its edge, and every sticky bar - the header,
+       a thread's title row - goes with it, leaving the root's bare colour
+       showing above them. The scroll itself still works everywhere; only
+       the bounce past the edge is gone. */
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Right-to-left                                                        */
+  /*                                                                      */
+  /* Almost all of the mirroring is done by using CSS logical properties  */
+  /* in the markup (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`) */
+  /* rather than by rules here - a layout that mirrors itself is the only  */
+  /* kind that stays mirrored as the app grows. What is left below is the  */
+  /* set of things logical properties genuinely cannot express.           */
+  /* ------------------------------------------------------------------ */
+
+  /* Figures are sealed off from the Arabic around them.
+
+     An amount, an IBAN, a date and a request number are Latin-script
+     runs, and the bidi algorithm will happily reorder the punctuation inside
+     them when they sit next to Arabic - `LR-2026-0117` reads as `0117-2026-LR`
+     at the end of a sentence. `isolate` is what stops that.
+
+     Deliberately *not* `direction: ltr`. These classes sit on table cells as
+     often as on inline runs, and `direction` is what `text-start` / `text-end`
+     resolve against: an amount cell flipped to LTR aligns to the opposite edge
+     from the `<th>` above it, which stays RTL - the column header and its own
+     figures end up on opposite sides. Isolation alone protects the digits and
+     leaves alignment to the same rules the header follows.
+
+     Where a string must render left-to-right whatever surrounds it - money,
+     which carries a currency code - the isolate is embedded in the string
+     itself in `lib/format.ts`, not imposed on the box. */
+  [dir="rtl"] .tabular-nums,
+  [dir="rtl"] .font-mono,
+  [dir="rtl"] [data-numeric] {
+    unicode-bidi: isolate;
+  }
+
+  /* Icons that mean "forward" rather than "right".
+
+     A chevron pointing at the next page has to point the way the reader is
+     travelling. Marked explicitly with `data-flip` rather than flipping every
+     icon, because most of them must not move: a checkmark, a padlock, a
+     spinner and a company logo all read as broken when mirrored. */
+  [dir="rtl"] [data-flip] {
+    transform: scaleX(-1);
+  }
+
+  /* Recharts positions its tooltip with inline `left`/`top` in physical pixels
+     and cannot be told about direction, so the wrapper is pinned back to LTR
+     and only the text inside it flips. */
+  [dir="rtl"] .recharts-wrapper,
+  [dir="rtl"] .recharts-surface {
+    direction: ltr;
+  }
+
+  [dir="rtl"] .recharts-tooltip-wrapper {
+    direction: rtl;
+  }
+
+  [data-slot="chart"] {
+    touch-action: auto;
+  }
+
+  .CollapsibleContent {
+    overflow: hidden;
+  }
+
+  .CollapsibleContent[data-state="open"] {
+    animation: slideDown 300ms ease-out;
+  }
+
+  .CollapsibleContent[data-state="closed"] {
+    animation: slideUp 300ms ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+
+    to {
+      height: 0;
+    }
+  }
+}
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Auth hero motion. Everything here is decorative, so it is disabled wholesale
+   under prefers-reduced-motion at the bottom of this block.
+   --------------------------------------------------------------------------- */
+
+/* The pulse that sweeps along a rail or a placeholder. */
+/* The bar under the top edge while an organization switch is in flight. */
+/* The correction run's handoff rule: a hairline drawn out from the
+   centre, the way a new page is ruled - once, timed to the curtain. */
+@keyframes handoff-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes org-switch {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+/* Reveals the navigation bar only once a navigation has outlived its own
+   delay; see `navigation-progress.tsx`. */
+@keyframes nav-progress-appear {
+  to {
+    opacity: 1;
+  }
+}
+[dir="rtl"] .animate-\[org-switch_1s_ease-in-out_infinite\] {
+  animation-direction: reverse;
+}
+
+@keyframes ed-sweep {
+  from {
+    transform: translateX(-30%);
+  }
+  to {
+    transform: translateX(130%);
+  }
+}
+
+/* ---- Auth form -------------------------------------------------------- */
+
+/* The submit button carries a tinted glow rather than a neutral drop shadow,
+   so it reads as the one primary action on the card. Written here because the
+   colour is mixed from the theme token and lifts on hover. */
+.auth-submit {
+  box-shadow:
+    0 4px 14px -4px color-mix(in oklab, var(--primary) 45%, transparent),
+    0 1px 2px -1px color-mix(in oklab, var(--primary) 30%, transparent);
+  transition:
+    transform 200ms,
+    box-shadow 200ms,
+    background-color 200ms;
+}
+
+.auth-submit:hover:not(:disabled) {
+  box-shadow:
+    0 6px 20px -4px color-mix(in oklab, var(--primary) 55%, transparent),
+    0 2px 4px -2px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-submit {
+    transition: none;
+  }
+
+  .auth-submit:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ---- Marquee ------------------------------------------------------------- */
+
+/* Shared by the agents banner and the ERP logo row. Both hold two identical
+   copies of their content and shift by exactly half the track width, so the
+   loop restarts on a frame identical to the one it left - no seam. */
+
+/* Ends are faded rather than clipped, so items slide in and out of view. */
+.marquee {
+  --marquee-fade: 2rem;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--marquee-fade),
+    #000 calc(100% - var(--marquee-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--marquee-fade),
+    #000 calc(100% - var(--marquee-fade)),
+    transparent 100%
+  );
+}
+
+.marquee-track {
+  animation: marquee-scroll var(--marquee-duration, 56s) linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---- Auth hero pipeline (PLAN §4) --------------------------------------- */
+
+/* The connector between two stages. Drawn per gap and stopping short of each
+   dot, so it never crosses an icon; the dots are translucent and a single rail
+   behind the row showed through them. */
+.ap-link {
+  background-color: rgb(255 255 255 / 0.14);
+  overflow: hidden;
+}
+
+/* The packet: a short bright segment that runs the gap just as the stage
+   behind it finishes and hands over to the next one. */
+.ap-link-pulse {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(135 217 238 / 0.15) 30%,
+    #b9ebe1 55%,
+    rgb(135 217 238 / 0) 100%
+  );
+  transform: translateX(-100%);
+  animation: ap-link-travel var(--stage-cycle, 7s) linear infinite;
+  animation-delay: var(--stage-delay, 0ms);
+}
+
+@keyframes ap-link-travel {
+  /* Timed against `ap-stage-on` below: a stage lights at 7% of the cycle and
+     the next one 1/7th of a cycle later (~21%), so the packet leaves just
+     after the hand-off begins and lands exactly as the next stage comes up. */
+  0%,
+  8% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  21% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+  23%,
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Each stage lights as the packet reaches it, then falls back. The delay is
+   handed down from the list item as `--stage-delay`; the icon and the label
+   are separate elements, so both read the same inherited pair. */
+@keyframes ap-stage-on {
+  0%,
+  100% {
+    border-color: rgb(255 255 255 / 0.12);
+    background-color: rgb(255 255 255 / 0.04);
+    color: rgb(255 255 255 / 0.5);
+    transform: none;
+  }
+  7%,
+  16% {
+    border-color: rgb(135 217 238 / 0.55);
+    background-color: rgb(135 217 238 / 0.16);
+    color: #b9ebe1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes ap-stage-label-on {
+  0%,
+  100% {
+    color: rgb(255 255 255 / 0.45);
+  }
+  7%,
+  16% {
+    color: rgb(255 255 255 / 0.92);
+  }
+}
+
+.ap-stage-dot {
+  border-color: rgb(255 255 255 / 0.12);
+  background-color: rgb(255 255 255 / 0.04);
+  color: rgb(255 255 255 / 0.5);
+  animation: ap-stage-on var(--stage-cycle, 7s) ease-in-out infinite;
+  animation-delay: var(--stage-delay, 0ms);
+}
+
+.ap-stage-label {
+  color: rgb(255 255 255 / 0.45);
+  animation: ap-stage-label-on var(--stage-cycle, 7s) ease-in-out infinite;
+  animation-delay: var(--stage-delay, 0ms);
+}
+
+/* Staggered entrance for the hero copy. */
+@keyframes ed-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Heartbeat on the brand mark - two quick beats, then rest. */
+@keyframes ed-beat {
+  0%,
+  38%,
+  100% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.16);
+  }
+  24% {
+    transform: scale(1.04);
+  }
+  31% {
+    transform: scale(1.11);
+  }
+}
+
+/* Slow drift for the background glow. */
+@keyframes ed-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-4%, 5%, 0) scale(1.12);
+  }
+}
+
+.ed-sweep {
+  animation: ed-sweep 3.6s linear infinite;
+}
+
+.ed-rise {
+  opacity: 0;
+  animation: ed-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.ed-beat {
+  animation: ed-beat 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.ed-drift {
+  animation: ed-drift 18s ease-in-out infinite;
+}
+
+/* A light sweeping across a placeholder while a sentence is being written.
+   `background-position` rather than a moving child, so nothing is laid out and
+   the whole effect stays on the compositor. */
+@keyframes ed-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Text resolving out of a blur as it arrives. The blur is what makes the wait
+   read as "writing" rather than "loading": the shape of the sentence appears
+   before the sentence does. */
+@keyframes ed-resolve {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.ed-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    color-mix(in oklab, var(--primary) 22%, var(--muted)) 50%,
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: ed-shimmer 1.6s linear infinite;
+}
+
+/* The same sweep in white, for placeholders standing on a dark header. */
+.ed-shimmer-light {
+  background-image: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.08) 25%,
+    rgb(255 255 255 / 0.2) 50%,
+    rgb(255 255 255 / 0.08) 75%
+  );
+  background-size: 200% 100%;
+  animation: ed-shimmer 1.6s linear infinite;
+}
+
+.ed-resolve {
+  animation: ed-resolve 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---- Ask AP: the face ---------------------------------------------------- */
+
+/* The pair drifts as one - eyes that move independently read as broken rather
+   than alive. The long hold at centre is what stops it looking like a metronome. */
+@keyframes copilot-look {
+  0%,
+  18% {
+    transform: translateX(0);
+  }
+  26%,
+  40% {
+    transform: translateX(4px);
+  }
+  48%,
+  50% {
+    transform: translateX(0);
+  }
+  58%,
+  74% {
+    transform: translateX(-4.5px);
+  }
+  82%,
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.copilot-eyes {
+  animation: copilot-look 7s ease-in-out infinite;
+}
+
+/* Working: the idle glance quickens. The narrowed eyes that go with it are
+   set on the pupils themselves, since those are pointer-driven. */
+.copilot-face-thinking.copilot-eyes {
+  animation-duration: 2.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-sweep,
+  .ed-beat,
+  .ed-drift,
+  .ed-shimmer,
+  .ed-shimmer-light,
+  .ap-link-pulse,
+  .marquee-track,
+  .copilot-eyes,
+  .ap-stage-dot,
+  .ap-stage-label {
+    animation: none;
+  }
+
+  .ed-rise,
+  .ed-resolve {
+    opacity: 1;
+    filter: none;
+    animation: none;
+  }
+}
+
+/* Sign-in hand-off: a brand reveal. The mark resolves out of a blur, the
+   name settles beside it, and a fine dot field behind them lights up in a
+   single wave that travels out from the mark. No gradient wash, no bar, no
+   spinner. The wave is a ring-shaped mask whose radius is animated through
+   a registered custom property. */
+@property --intro-wave {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes intro-mark {
+  0% { opacity: 0; transform: scale(0.55); filter: blur(14px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes intro-word {
+  from { opacity: 0; transform: translateX(-10px); filter: blur(8px); }
+  to { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+@keyframes intro-field {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes intro-wave {
+  from { --intro-wave: 0px; opacity: 1; }
+  to { --intro-wave: 110vmax; opacity: 0; }
+}
+.intro-mark { animation: intro-mark 0.75s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.intro-word { animation: intro-word 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both; }
+.intro-field,
+.intro-wave {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, currentColor 1.1px, transparent 1.6px);
+  background-size: 28px 28px;
+  background-position: center;
+}
+.intro-field {
+  color: color-mix(in oklch, var(--foreground) 14%, transparent);
+  mask-image: radial-gradient(circle at center, black 0%, transparent 62%);
+  animation: intro-field 0.9s ease-out both;
+}
+.intro-wave {
+  color: var(--primary);
+  mask-image: radial-gradient(
+    circle at center,
+    transparent calc(var(--intro-wave) - 140px),
+    black var(--intro-wave),
+    transparent calc(var(--intro-wave) + 60px)
+  );
+  animation: intro-wave 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-mark, .intro-word, .intro-field, .intro-wave { animation: none; }
+  .intro-wave { display: none; }
+}
+
+
+/* The dark rail's active item: a light pill with dark ink, the one spot of
+   paper on the navy - hover stays a translucent wash via the accent token.
+   Scoped to light mode; dark mode keeps its own quiet accent. */
+:root:not(.dark) [data-sidebar="menu-button"][data-active="true"],
+:root:not(.dark) [data-sidebar="menu-sub-button"][data-active="true"] {
+  background: oklch(0.975 0.01 176);
+  color: oklch(0.28 0.05 176);
+}
+
+/* The pill's icon in the same dark ink - the shared button recipe paints
+   it with --sidebar-primary, which is a light violet tuned for the navy. */
+:root:not(.dark) [data-sidebar="menu-button"][data-active="true"] > svg,
+:root:not(.dark) [data-sidebar="menu-sub-button"][data-active="true"] > svg {
+  color: oklch(0.5 0.1 176);
+}
+
+/* Menus that open out of the dark rail (the organization switcher and the
+   profile menu) wear the rail's palette instead of the page's white popover,
+   so the flyout reads as part of the sidebar rather than a foreign panel.
+   The dropdown recipe only ever uses token roles - popover, accent, border,
+   muted ink - so remapping the tokens restyles every row, separator and
+   shortcut without touching the markup. */
+.menu-dark {
+  --popover: oklch(0.3 0.025 215);
+  --popover-foreground: var(--sidebar-foreground);
+  --accent: var(--sidebar-accent);
+  --accent-foreground: var(--sidebar-accent-foreground);
+  --border: color-mix(in oklab, var(--sidebar-foreground) 14%, transparent);
+  --muted-foreground: color-mix(
+    in oklab,
+    var(--sidebar-foreground) 62%,
+    transparent
+  );
+  --background: var(--sidebar-accent);
+  --foreground: var(--sidebar-foreground);
+  --ring: var(--sidebar-ring);
+  /* Separators are bg-muted in the dropdown recipe; on the navy that token
+     is the light theme's near-white, so it reads as a bright wire. A faint
+     wash of the rail's ink instead. */
+  --muted: color-mix(in oklab, var(--sidebar-foreground) 10%, transparent);
+}
+
+/* lenis.css switches iframes to pointer-events: none so an embedded page
+   cannot swallow the wheel mid-glide - but the bill's PDF preview is an
+   iframe, and it must stay scrollable and clickable. Events inside the
+   frame never reach Lenis anyway. */
+.lenis.lenis-smooth iframe {
+  pointer-events: auto;
+}
+
+/* The page must not move when a drawer, menu or dialog opens over it. Two
+   things used to move it. lenis.css answers a modal's scroll lock by
+   switching the page scroller to `overflow: clip`, which throws away its
+   scrollbar; for anyone whose scrollbars are always shown (a mouse, or the
+   macOS setting) the content then grows fifteen pixels wider on open and
+   shrinks back on close. And a page too short to scroll sat wider than a
+   page that could. So the scroller reserves its gutter always, and a lock
+   hides the overflow rather than clipping it: still a scroll container,
+   still a gutter, nothing reflows. The wheel is stopped by Lenis and by
+   the lock itself, not by the lack of a scrollbar. */
+#page-scroll {
+  scrollbar-gutter: stable;
+}
+
+#page-scroll.lenis-stopped {
+  overflow-y: hidden;
+}
+
+/* ── The reading room ───────────────────────────────────────────────────────
+   Where a bill is read. The sheet has to look lit rather than pasted on, so
+   the ground carries an overhead light and a shaded floor: two gradients, no
+   images, and the paper's own shadow does the rest. Recessed at the edges,
+   so the pane reads as a space with depth rather than a flat panel with a
+   white rectangle in it. */
+.doc-room {
+  background:
+    radial-gradient(
+      110% 60% at 50% -8%,
+      color-mix(in oklab, var(--background) 45%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--foreground) 9%, var(--muted)),
+      color-mix(in oklab, var(--foreground) 15%, var(--muted))
+    );
+}
+
+/* In the dark theme the paper is still a photograph of a white page, so the
+   room has to go darker than the surface it holds, not lighter. Mixing the
+   foreground in would have lifted it - the one place the token does the
+   opposite of what it does in the light theme. */
+.dark .doc-room {
+  background:
+    radial-gradient(
+      110% 60% at 50% -8%,
+      color-mix(in oklab, var(--muted) 45%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--background) 82%, black),
+      color-mix(in oklab, var(--background) 62%, black)
+    );
+}
+
+.doc-room::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    inset 0 14px 26px -22px rgb(18 16 30 / 0.55);
+}
+
+/* The paper. A contact shadow tight under the sheet and an ambient one much
+   further out - one shadow at one distance always reads as a sticker. */
+.doc-sheet {
+  box-shadow:
+    0 0 0 1px rgb(18 16 30 / 0.09),
+    0 1px 1px rgb(18 16 30 / 0.06),
+    0 2px 4px -1px rgb(18 16 30 / 0.08),
+    0 18px 40px -16px rgb(18 16 30 / 0.3),
+    0 40px 80px -40px rgb(18 16 30 / 0.4);
+}
+
+.dark .doc-sheet {
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.07),
+    0 2px 6px -1px rgb(0 0 0 / 0.5),
+    0 20px 44px -16px rgb(0 0 0 / 0.6),
+    0 46px 90px -44px rgb(0 0 0 / 0.7);
+}
+
+/* A region the reader has just chosen. One pass, then still: the pulse is
+   there to carry the eye to the spot, not to sit blinking on the page.
+
+   On its own layer rather than on the region, because a ring in Tailwind is a
+   box-shadow too - animating the region's own shadow took the ring off the
+   chosen field for the length of the pulse. */
+@keyframes doc-region-land {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--ring) 50%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+.doc-region-land::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: doc-region-land 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The page while it is still coming down the wire: paper first, then the
+   ruled lines of a bill sweeping under a light. A spinner says "wait"; this
+   says what is arriving. */
+@keyframes doc-skeleton-sweep {
+  from {
+    transform: translateX(-60%);
+  }
+  to {
+    transform: translateX(160%);
+  }
+}
+
+.doc-skeleton-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--foreground) 5%, transparent),
+    transparent
+  );
+  animation: doc-skeleton-sweep 1.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-region-land::after {
+    animation: none;
+  }
+  .doc-skeleton-sweep::after {
+    animation: none;
+  }
+}
+
+/* Finance Copilot's thinking state: a slowly turning gradient orb beside
+   a word with light sweeping through it. Reduced motion stills both. */
+.copilot-orb {
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 0deg,
+    oklch(0.455 0.132 176),
+    #b9ebe1 45%,
+    oklch(0.455 0.132 176 / 0.15) 75%,
+    oklch(0.455 0.132 176)
+  );
+  box-shadow: 0 0 10px oklch(0.455 0.132 176 / 0.35);
+  animation: spin 1.4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .copilot-orb {
+    animation: none;
+  }
+}
+
+@keyframes copilot-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.copilot-thinking {
+  background-image: linear-gradient(
+    90deg,
+    var(--muted-foreground) 35%,
+    var(--foreground) 50%,
+    var(--muted-foreground) 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: copilot-shimmer 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .copilot-thinking {
+    animation: none;
+    background: none;
+    color: var(--muted-foreground);
+  }
+}
+
+/* The upload strip's indeterminate progress: a violet comet crossing its
+   track while the worker holds the file. */
+@keyframes upload-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
+  }
+}
+.upload-sweep {
+  animation: upload-sweep 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .upload-sweep {
+    animation: none;
+    transform: none;
+    width: 100%;
+  }
+}
+
+/* The submit dialog's route: dashes marching toward the approver, so the
+   wire reads as flow rather than a rule. Stilled under reduced motion. */
+@keyframes route-march {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+.route-wire {
+  animation: route-march 0.9s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-wire {
+    animation: none;
+  }
+}
+[dir="rtl"] .route-wire {
+  animation-direction: reverse;
+}
+
+/* Browser autofill paints its own pale blue behind a filled field, which
+   fights the card. Repaint it with the input's own surface and text. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--foreground);
+  -webkit-box-shadow: 0 0 0 1000px var(--input-surface, var(--background)) inset;
+  box-shadow: 0 0 0 1000px var(--input-surface, var(--background)) inset;
+  caret-color: var(--foreground);
+  transition: background-color 9999s ease-out;
+}
