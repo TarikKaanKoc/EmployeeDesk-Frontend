@@ -31,3 +31,7 @@ npm run build
 - **Assistant** (`src/components/assistant/assistant-console.tsx`): streams `token` and `tool_call` events, then renders citations, tool chips, guardrail flags and, for a drafted leave request, the confirmation card that calls `/assistant/confirm/{id}`. Typing "yes" in the composer is not a confirmation.
 
 Screens: `/login`, `/copilot`, `/leave`, `/procurement`, `/audit`.
+
+## CI/CD
+
+`ci.yml` runs lint, typecheck, tests and a production build on every push and pull request, and builds the image without pushing. `deploy.yml` runs after a green CI on `main`: it builds the image in Azure Container Registry, rolls a new revision of the web Container App and smoke-tests `/login`. It signs in to Azure with OIDC; the repository needs the secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` and the variables `AZURE_RESOURCE_GROUP`, `AZURE_ACR_NAME`.

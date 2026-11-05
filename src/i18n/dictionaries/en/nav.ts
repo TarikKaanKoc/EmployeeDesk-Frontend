@@ -2,6 +2,7 @@ export const nav = {
   groups: {
     assistant: "Assistant",
     me: "My records",
+    docs: "Documentation",
   },
 
   items: {
@@ -9,6 +10,9 @@ export const nav = {
     leave: "Leave",
     procurement: "Purchase requests",
     audit: "Activity",
+    docsArchitecture: "Platform architecture",
+    docsAi: "AI architecture",
+    docsMonitoring: "Monitoring",
   },
 
   badges: {

@@ -4,6 +4,7 @@ export const nav: Dictionary["nav"] = {
   groups: {
     assistant: "المساعد",
     me: "سجلاتي",
+    docs: "التوثيق",
   },
 
   items: {
@@ -11,6 +12,9 @@ export const nav: Dictionary["nav"] = {
     leave: "الإجازات",
     procurement: "طلبات الشراء",
     audit: "النشاط",
+    docsArchitecture: "بنية المنصة",
+    docsAi: "بنية الذكاء الاصطناعي",
+    docsMonitoring: "المراقبة",
   },
 
   badges: {
