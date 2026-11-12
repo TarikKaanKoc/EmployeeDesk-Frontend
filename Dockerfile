@@ -1,12 +1,12 @@
 # Three stages: dependencies, build, runtime. The runtime carries only the
 # standalone server Next emits (server.js plus the node_modules subset it
 # traced), the static assets and the public folder, and runs unprivileged.
-FROM node:22-alpine AS deps
+FROM node:25-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 
-FROM node:22-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
@@ -15,7 +15,7 @@ COPY . .
 # build's env check quiet.
 RUN API_URL=http://api:8012/api npm run build
 
-FROM node:22-alpine
+FROM node:25-alpine
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
