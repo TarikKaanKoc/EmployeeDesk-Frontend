@@ -63,6 +63,7 @@ const TOOL_LABEL: Record<string, string> = {
   list_leave_requests: "Leave requests",
   draft_leave_request: "Leave request draft",
   get_purchase_request_status: "Purchase request",
+  list_purchase_requests: "Purchase requests",
   search_policy: "Policy search",
 };
 

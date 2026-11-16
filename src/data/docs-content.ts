@@ -72,8 +72,8 @@ export const DOCS: Record<DocSlug, DocPage> = {
       },
       {
         icon: "wrench",
-        title: "Five scoped tools",
-        body: "Three read leave balances, leave requests and policy clauses from PostgreSQL. One reads purchase request status from the mock ERP. One drafts a leave request and parks it in Redis with a TTL. Every tool is scoped to the signed-in employee at the boundary, so the model cannot reach another record even if asked to.",
+        title: "Six scoped tools",
+        body: "Three read leave balances, leave requests and policy clauses from PostgreSQL. Two read from the mock ERP: one lists the employee's own purchase requests and one reads the status of a single request by number. One drafts a leave request and parks it in Redis with a TTL. Every tool is scoped to the signed-in employee at the boundary, so the model cannot reach another record even if asked to.",
       },
       {
         icon: "eye",

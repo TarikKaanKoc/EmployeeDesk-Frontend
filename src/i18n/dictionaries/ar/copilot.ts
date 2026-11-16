@@ -48,18 +48,21 @@ export const copilot: Dictionary["copilot"] = {
       list_leave_requests: "تم البحث عن طلبات إجازتك",
       draft_leave_request: "تم تحضير طلب إجازة",
       get_purchase_request_status: "تم التحقق من طلب الشراء",
+      list_purchase_requests: "تم البحث عن طلبات الشراء الخاصة بك",
       search_policy: "تم البحث في السياسات",
     },
     get_leave_balance: "رصيد الإجازات",
     list_leave_requests: "طلبات الإجازة",
     draft_leave_request: "مسودة طلب إجازة",
     get_purchase_request_status: "طلب الشراء",
+    list_purchase_requests: "طلبات الشراء",
     search_policy: "البحث في السياسة",
     running: {
       get_leave_balance: "جارٍ التحقق من رصيد إجازاتك…",
       list_leave_requests: "جارٍ البحث عن طلبات إجازتك…",
       draft_leave_request: "جارٍ تحضير طلب الإجازة…",
       get_purchase_request_status: "جارٍ سؤال نظام المشتريات…",
+      list_purchase_requests: "جارٍ سؤال نظام المشتريات…",
       search_policy: "جارٍ البحث في السياسات…",
     },
     status: {
@@ -128,6 +131,11 @@ export const copilot: Dictionary["copilot"] = {
       empty: "لا توجد طلبات إجازة بعد.",
       columns: { id: "الطلب", type: "النوع", dates: "التواريخ", days: "الأيام", status: "الحالة" },
       status: { pending: "قيد الانتظار", approved: "موافق عليه", rejected: "مرفوض", cancelled: "ملغى" },
+    },
+    purchaseList: {
+      title: "طلبات الشراء",
+      empty: "لا توجد طلبات شراء بعد.",
+      columns: { id: "الطلب", purpose: "الغرض", amount: "المبلغ", updated: "آخر تحديث", status: "الحالة" },
     },
     purchase: {
       title: "طلب الشراء",

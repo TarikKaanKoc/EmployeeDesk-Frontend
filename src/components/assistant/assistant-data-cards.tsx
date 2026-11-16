@@ -186,6 +186,47 @@ export function PurchaseRequestCard({ data }: { data: PurchaseResult }) {
   );
 }
 
+export function PurchaseRequestsCard({ rows, total }: { rows: PurchaseResult[]; total?: number }) {
+  const t = useScope("copilot");
+  const { short, money } = useDates();
+  const c = t.cards.purchaseList.columns;
+  return (
+    <CardFrame icon={Receipt} title={t.cards.purchaseList.title} meta={total ?? rows.length}>
+      {rows.length === 0 ? (
+        <p className="text-muted-foreground px-4 py-4 text-[13px]">{t.cards.purchaseList.empty}</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px]">
+            <thead className="text-muted-foreground text-[11px] font-medium">
+              <tr className="border-b">
+                <th className="px-4 py-2 text-start font-medium">{c.id}</th>
+                <th className="px-3 py-2 text-start font-medium">{c.purpose}</th>
+                <th className="px-3 py-2 text-end font-medium">{c.amount}</th>
+                <th className="px-3 py-2 text-start font-medium">{c.updated}</th>
+                <th className="px-4 py-2 text-end font-medium">{c.status}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-border/60 divide-y">
+              {rows.map((r) => (
+                <tr key={r.pr_number}>
+                  <td className="px-4 py-2 font-mono text-[12px] whitespace-nowrap" dir="ltr">{r.pr_number}</td>
+                  <td className="px-3 py-2">
+                    <span className="block">{r.business_purpose}</span>
+                    <span className="text-muted-foreground block text-[11px]">{r.current_step}</span>
+                  </td>
+                  <td className="px-3 py-2 text-end whitespace-nowrap tabular-nums">{money.format(r.amount_qar)}</td>
+                  <td className="px-3 py-2 whitespace-nowrap tabular-nums">{short.format(new Date(r.last_updated))}</td>
+                  <td className="px-4 py-2 text-end"><StatusPill status={r.status} label={t.cards.purchase.status[r.status]} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </CardFrame>
+  );
+}
+
 /** Every tool result that has a drawing, in the order the tools ran. */
 export function ToolResultCards({ calls }: { calls: ToolCall[] }) {
   const cards = calls.flatMap((call, index) => {
@@ -196,6 +237,15 @@ export function ToolResultCards({ calls }: { calls: ToolCall[] }) {
     }
     if (call.name === "list_leave_requests" && Array.isArray(result.requests)) {
       return [<LeaveRequestsCard key={`req-${index}`} rows={result.requests as RequestRow[]} />];
+    }
+    if (call.name === "list_purchase_requests" && Array.isArray(result.requests)) {
+      return [
+        <PurchaseRequestsCard
+          key={`prs-${index}`}
+          rows={result.requests as PurchaseResult[]}
+          total={typeof result.total === "number" ? result.total : undefined}
+        />,
+      ];
     }
     if (call.name === "get_purchase_request_status" && typeof result.pr_number === "string") {
       return [<PurchaseRequestCard key={`pr-${index}`} data={result as unknown as PurchaseResult} />];

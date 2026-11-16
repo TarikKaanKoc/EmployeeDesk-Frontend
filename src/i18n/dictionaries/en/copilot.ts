@@ -47,18 +47,21 @@ export const copilot = {
       list_leave_requests: "Looked up your leave requests",
       draft_leave_request: "Prepared a leave request",
       get_purchase_request_status: "Checked the purchase request",
+      list_purchase_requests: "Looked up your purchase requests",
       search_policy: "Searched the policies",
     },
     get_leave_balance: "Leave balance",
     list_leave_requests: "Leave requests",
     draft_leave_request: "Leave request draft",
     get_purchase_request_status: "Purchase request",
+    list_purchase_requests: "Purchase requests",
     search_policy: "Policy search",
     running: {
       get_leave_balance: "Checking your leave balance…",
       list_leave_requests: "Looking up your leave requests…",
       draft_leave_request: "Preparing the leave request…",
       get_purchase_request_status: "Asking the procurement system…",
+      list_purchase_requests: "Asking the procurement system…",
       search_policy: "Searching the policies…",
     },
     status: {
@@ -127,6 +130,11 @@ export const copilot = {
       empty: "No leave requests yet.",
       columns: { id: "Request", type: "Type", dates: "Dates", days: "Days", status: "Status" },
       status: { pending: "Pending", approved: "Approved", rejected: "Rejected", cancelled: "Cancelled" },
+    },
+    purchaseList: {
+      title: "Purchase requests",
+      empty: "No purchase requests yet.",
+      columns: { id: "PR", purpose: "Purpose", amount: "Amount", updated: "Updated", status: "Status" },
     },
     purchase: {
       title: "Purchase request",

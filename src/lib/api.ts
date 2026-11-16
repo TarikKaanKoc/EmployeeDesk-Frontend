@@ -68,6 +68,7 @@ export type ToolName =
   | "list_leave_requests"
   | "draft_leave_request"
   | "get_purchase_request_status"
+  | "list_purchase_requests"
   | "search_policy";
 
 export type ToolStatus = "ok" | "refused" | "confirmation_required" | "error" | "empty";
